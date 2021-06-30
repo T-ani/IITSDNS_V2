@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +51,7 @@ import java.util.UUID;
 import android.os.Message;
 
 import com.example.iitsdns.Database.DatabaseHelperClass;
+import com.example.iitsdns.EmergencyCall.EmergencyCallActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     OutputStream OUTPUTSTREAM = null;
     SendReceive sendReceive;
     long NOTI_1 = 1000;
-    long NOTI_2 = 12*60*1000;
+    long NOTI_2 = 12 * 60 * 1000;
     TextView edit_1, edit_2;
     long gps_msg_time;
     long gps_total_time;
@@ -88,12 +90,16 @@ public class MainActivity extends AppCompatActivity {
     byte[] ex;
     byte[] first_data = new byte[2];
     byte[] second_data = new byte[2];
+    int permission_msg = 0;
+    int permission_locate_msg_call = 0;
 
 
     static final int STATE_CONNECTING = 2;
     static final int STATE_CONNECTED = 3;
     static final int STATE_CONNECTION_FAILED = 4;
     static final int STATE_MESSAGE_RECEIVED = 5;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
+
     String position;
     int incoming_buffer_size = 60;
     int incoming_byte_size = 6;
@@ -111,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         databaseHelperClass = new DatabaseHelperClass(MainActivity.this);
 
-        bluetoothAdapter_1=BluetoothAdapter.getDefaultAdapter();
+        bluetoothAdapter_1 = BluetoothAdapter.getDefaultAdapter();
 
-        gps_msg_time=60*1000;
-        gps_total_time=System.currentTimeMillis()-gps_msg_time;
+        gps_msg_time = 60 * 1000;
+        gps_total_time = System.currentTimeMillis() - gps_msg_time;
 
         edit_1 = findViewById(R.id.edit_1);
         edit_2 = findViewById(R.id.edit_2);
@@ -158,7 +164,32 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        permission_location_msg_call();
 
+        System.out.println("----" + permission_locate_msg_call + "----");
+
+    }
+
+
+    private void permission_location_msg_call() {
+
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+                && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+
+                && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+
+            permission_locate_msg_call = 1;
+
+
+        } else {
+//                    POP UP FOR GET THE PERMISSION..........
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS, Manifest.permission.CALL_PHONE}, 44);
+
+        }
     }
 
     private class Notification extends Thread {
@@ -182,13 +213,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (System.currentTimeMillis() - notification1 > notify1After) {
 
-                    LocationManager lm = (LocationManager)getSystemService(MainActivity.LOCATION_SERVICE);
+                    LocationManager lm = (LocationManager) getSystemService(MainActivity.LOCATION_SERVICE);
                     boolean gps_enabled = false;
                     boolean network_enabled = false;
 
                     try {
                         gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                    } catch(Exception ex) {
+                    } catch (Exception ex) {
 
                     }
 
@@ -198,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
                     }*/
 
-                    if(!gps_enabled){
+                    if (!gps_enabled) {
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             NotificationChannel channel = new NotificationChannel("n", "n", NotificationManager.IMPORTANCE_DEFAULT);
@@ -223,8 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 if (System.currentTimeMillis() - notification2 > notify2After) {
 
 
-                    if(!bluetoothAdapter_1.isEnabled())
-                    {
+                    if (!bluetoothAdapter_1.isEnabled()) {
                         notification2 = System.currentTimeMillis();
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             NotificationChannel channel2 = new NotificationChannel("n", "n", NotificationManager.IMPORTANCE_DEFAULT);
@@ -397,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Settings.class));
                 return true;
             case R.id.menu_about:
-                //startActivity(new Intent(MainActivity.this, About_App.class));
+                startActivity(new Intent(MainActivity.this, About_App.class));
                 return true;
 
 
@@ -430,17 +460,20 @@ public class MainActivity extends AppCompatActivity {
                 edit_2.setText(String.valueOf(data_1));
 
 // al mamun working here..........
-                if (data_2<databaseHelperClass.readSPO2AndHeartRate().getSPO2() || data_1<databaseHelperClass.readSPO2AndHeartRate().getHeartBeat())
+                if (data_1 < databaseHelperClass.readSPO2AndHeartRate().getSPO2() || data_2 < databaseHelperClass.readSPO2AndHeartRate().getHeartBeat())
                 {
+                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        getMyLocation(data_1,data_2);
+                            && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
 
+                            && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                        getMyLocation(data_1, data_2);
                     } else {
-//                    POP UP FOR GET THE PERMISSION..........
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
+                        permission_location_msg_call();
                     }
+
 
                 }
 
@@ -462,90 +495,113 @@ public class MainActivity extends AppCompatActivity {
 
 
     //    getlocation here..........
+
     @SuppressLint("MissingPermission")
-    private void getMyLocation(int a,int b) {
+    private void getMyLocation(int a, int b) {
         if (System.currentTimeMillis() - gps_total_time > gps_msg_time) {
 
-            gps_total_time=System.currentTimeMillis();
+            gps_total_time = System.currentTimeMillis();
 
 //        DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(MainActivity.this);
-        LocationManager locationManager = (LocationManager) getSystemService(MainActivity.LOCATION_SERVICE);
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    if (location != null) {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
-
-                        String number1 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
-
-                        String number2 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
-
-                        String message = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n";
-                        // String message1 = "http://google.com/maps/bylatlng?lat=" + String.valueOf(location.getLatitude()) + "&lng=" + String.valueOf(location.getLongitude());
-                        String message2 = "\nLatitude : " + String.valueOf(location.getLatitude()) + "\nLongtitude : " + String.valueOf(location.getLongitude());
-
-                        SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(number1, null, message + message2, null, null);
-                        smsManager.sendTextMessage(number2, null, message + message2, null, null);
+            LocationManager locationManager = (LocationManager) getSystemService(MainActivity.LOCATION_SERVICE);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                fusedLocationProviderClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+                        Location location = task.getResult();
+                        if (location != null) {
 
 
-                    } else {
-                        LocationRequest locationRequest = new LocationRequest()
-                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(10000)
-                                .setFastestInterval(1000)
-                                .setNumUpdates(1);
-                        LocationCallback locationCallback = new LocationCallback() {
-                            @Override
-                            public void onLocationResult(@NonNull LocationResult locationResult) {
-//                                again send location
-                                Location location1 = locationResult.getLastLocation();
-                                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
 
-                                String number1 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
+                            String number1 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
 
-                                String number2 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
+                            String number2 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
 
-
-                                String message1 = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n";
-                                // String message = "http://google.com/maps/bylatlng?lat=" + String.valueOf(location1.getLatitude()) + "&lng=" + String.valueOf(location1.getLongitude());
-                                String message2 = "\nLatitude : " + String.valueOf(location1.getLatitude()) + "\nLongtitude : " + String.valueOf(location1.getLongitude());
+                            if(number1.length()>0||number2.length()>0)
+                            {
+                                String message = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n";
+                                // String message1 = "http://google.com/maps/bylatlng?lat=" + String.valueOf(location.getLatitude()) + "&lng=" + String.valueOf(location.getLongitude());
+                                String message2 = "\nLatitude : " + String.valueOf(location.getLatitude()) + "\nLongtitude : " + String.valueOf(location.getLongitude());
 
                                 SmsManager smsManager = SmsManager.getDefault();
-                                smsManager.sendTextMessage(number1, null, message1 + message2, null, null);
-                                smsManager.sendTextMessage(number2, null, message1 + message2, null, null);
+                                smsManager.sendTextMessage(number1, null, message + message2, null, null);
+                                smsManager.sendTextMessage(number2, null, message + message2, null, null);
 
-
-                                super.onLocationResult(locationResult);
+                                String call = "tel:" + number1;
+                                startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(call)));
                             }
-                        };
-//                        Request location updates.........
-                        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+
+
+
+
+
+                        } else {
+                            LocationRequest locationRequest = new LocationRequest()
+                                    .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                                    .setInterval(10000)
+                                    .setFastestInterval(1000)
+                                    .setNumUpdates(1);
+                            LocationCallback locationCallback = new LocationCallback() {
+                                @Override
+                                public void onLocationResult(@NonNull LocationResult locationResult) {
+//                                again send location
+                                    Location location1 = locationResult.getLastLocation();
+                                    //ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+
+
+                                    String number1 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
+
+                                    String number2 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
+
+                                    if(number1.length()>0||number2.length()>0)
+                                    {
+                                        String message1 = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n";
+                                        // String message = "http://google.com/maps/bylatlng?lat=" + String.valueOf(location1.getLatitude()) + "&lng=" + String.valueOf(location1.getLongitude());
+                                        String message2 = "\nLatitude : " + String.valueOf(location1.getLatitude()) + "\nLongtitude : " + String.valueOf(location1.getLongitude());
+
+                                        SmsManager smsManager = SmsManager.getDefault();
+                                        smsManager.sendTextMessage(number1, null, message1 + message2, null, null);
+                                        smsManager.sendTextMessage(number2, null, message1 + message2, null, null);
+
+                                        String call = "tel:" + number1;
+                                        startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(call)));
+
+                                    }
+
+
+
+
+                                    super.onLocationResult(locationResult);
+                                }
+                            };
+                            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
+
+                        }
 
                     }
-
-                }
-            });
-        } else {
+                });
+            } else {
 //            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
         }
-    }
 
     }
 
 
     // on activity result here..........
     @Override
-    public void onRequestPermissionsResult ( int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 44 && grantResults.length > 0 && grantResults[0] + grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            if(data_1<databaseHelperClass.readSPO2AndHeartRate().getSPO2() || data_2<databaseHelperClass.readSPO2AndHeartRate().getHeartBeat())
-            getMyLocation(data_1,data_2);
+        if ((requestCode == 44 && grantResults.length > 0 && grantResults[0] + grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+
+            Toast.makeText(MainActivity.this, "Permission Granted.....", Toast.LENGTH_SHORT).show();
+            permission_locate_msg_call = 1;
+
+
         } else {
-            Log.e("Mamun", "Problem occured");
-            Toast.makeText(MainActivity.this, "didn't get any response.....", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Permission Denied....", Toast.LENGTH_SHORT).show();
+
         }
+
     }
 }

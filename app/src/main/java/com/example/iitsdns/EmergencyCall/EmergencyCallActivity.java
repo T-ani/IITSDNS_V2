@@ -78,7 +78,8 @@ public class EmergencyCallActivity extends AppCompatActivity {
     private void CallingFunction() {
         DatabaseHelperClass databaseHelperClass = new DatabaseHelperClass(this);
         String number = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
-        number=number.replaceAll("Phone","");
+       // number=number.replaceAll("Phone","");
+
         if(number.length()>0){
             if(ContextCompat.checkSelfPermission(EmergencyCallActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(EmergencyCallActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);

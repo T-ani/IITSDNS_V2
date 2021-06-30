@@ -39,25 +39,50 @@ public class GPSActivity extends AppCompatActivity {
         if (getSupportActionBar() != null)
             getSupportActionBar().hide();
 
+        LocationManager lm = (LocationManager) getSystemService(MainActivity.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+
+        }
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         btnGPS = findViewById(R.id.btn_enable_gps);
+        boolean finalGps_enabled = gps_enabled;
+
+
+
         btnGPS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(GPSActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(GPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//                    getMyLocation();
-
-                } else {
-//                    POP UP FOR GET THE PERMISSION..........
-                    ActivityCompat.requestPermissions(GPSActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
+                if(!finalGps_enabled)
+                {
+                    permission();
                 }
+                else
+                {
+                    Toast.makeText(GPSActivity.this, "GPS is already enabled", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
 
     }
+
+    private void permission() {
+        if (ContextCompat.checkSelfPermission(GPSActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(GPSActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+//                    getMyLocation();
+
+        } else {
+//                    POP UP FOR GET THE PERMISSION..........
+            ActivityCompat.requestPermissions(GPSActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 44);
+        }
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -66,7 +91,6 @@ public class GPSActivity extends AppCompatActivity {
 //            getLocation();
             Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
         } else {
-            Log.e("Mamun", "Problem occured");
             Toast.makeText(GPSActivity.this, "didn't get any response.....", Toast.LENGTH_SHORT).show();
         }
     }
