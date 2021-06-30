@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ECECEC"
+    tools:context=".Settings">
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/M2"
+        app:title="Settings"
+        app:titleTextColor="@color/white"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/blue"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:elevation="@dimen/_100sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+
+            android:outlineSpotShadowColor="@color/Gray"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toStartOf="@+id/gps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".45"
+            tools:layout_editor_absoluteY="26dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:paddingRight="@dimen/_15sdp"
+                    app:lottie_rawRes="@raw/bluetooth" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_1sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_weight=".2"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center"
+                    android:text="Bluetooth"
+                    android:textColor="@color/corn_flower_blue"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/gps"
+
+            android:layout_width="0dp"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/_100sdp"
+            android:outlineSpotShadowColor="@color/Gray"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/blue"
+            app:layout_constraintWidth_percent=".45"
+            tools:layout_editor_absoluteY="26dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_15sdp"
+
+                    android:paddingRight="@dimen/_15sdp"
+                    android:src="@drawable/gps_n" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:padding="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_weight=".2"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center"
+                    android:text="GPS"
+                    android:textColor="@color/red"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/e_call"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:outlineSpotShadowColor="@color/Gray"
+            app:cardCornerRadius="@dimen/_15sdp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginLeft="5dp"
+            android:elevation="@dimen/_100sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toStartOf="@+id/e_number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".45"
+            tools:layout_editor_absoluteY="26dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_15sdp"
+
+                    android:paddingRight="@dimen/_15sdp"
+                    android:src="@drawable/call" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_weight=".2"
+                    android:text="Emergency Call"
+                    android:padding="@dimen/_1sdp"
+                    android:textStyle="bold"
+                    android:textColor="@color/red_2"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/e_number"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/_100sdp"
+            android:outlineSpotShadowColor="@color/Gray"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/e_call"
+            app:layout_constraintWidth_percent=".45"
+            tools:layout_editor_absoluteY="26dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingRight="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:src="@drawable/e_number"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_weight=".2"
+                    android:padding="@dimen/_1sdp"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center"
+                    android:text="Emergency Number"
+                    android:textStyle="bold"
+                    android:textColor="@color/corn_flower_blue"
+                    />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/e_m"
+            android:layout_width="0dp"
+            android:visibility="gone"
+            android:layout_height="match_parent"
+            android:outlineSpotShadowColor="@color/Gray"
+            app:cardCornerRadius="@dimen/_15sdp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:elevation="@dimen/_100sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toStartOf="@+id/set_limit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent=".45"
+            tools:layout_editor_absoluteY="26dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_15sdp"
+
+                    android:paddingRight="@dimen/_15sdp"
+                    android:src="@drawable/call" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_weight=".2"
+                    android:text="Emergency Call"
+                    android:textStyle="bold"
+                    android:textColor="@color/red_2"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/set_limit"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/_100sdp"
+            android:outlineSpotShadowColor="@color/Gray"
+            app:cardCornerRadius="@dimen/_15sdp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/e_m"
+            app:layout_constraintWidth_percent=".45"
+            tools:layout_editor_absoluteY="26dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:paddingRight="@dimen/_15sdp"
+                    android:paddingTop="@dimen/_15sdp"
+                    android:src="@drawable/set_limit"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_weight=".2"
+                    android:autoSizeTextType="uniform"
+                    android:gravity="center"
+                    android:text="Set Limit"
+                    android:padding="@dimen/_1sdp"
+                    android:textStyle="bold"
+                    android:textColor="@color/corn_flower_blue"
+                    />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#217C25</color>
+    <color name="green">#349C39</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="Gray">#808080</color>
+    <color name="Gray_2">#7AFFFFFF</color>
+    <color name="M">#EC9097</color>
+    <color name="red">#FE0002</color>
+    <color name="red_6">#d8031c</color>
+    <color name="red_2">#9e144a</color>
+    <color name="red__2">#EF0E66</color>
+    <color name="red_3">#F17DAA</color>
+    <color name="red_5">#e55791</color>
+    <color name="M2">#79BAEC</color>
+    <color name="M3">#063960</color>
+    <color name="Blue">#01016f </color>
+    <color name="red_4">#AF0C15</color>
+
+    <color name="black">#000000</color>//(216,191,216)
+    <color name="yellow3">#ffd485</color>
+    <color name="wheatb1">#ffe4c4</color>
+    <color name="lightblue3"> #ccd9ff</color>
+    <color name="lightblue4">  #e6ecff</color>
+    <color name="mediumspringgreen">#00FA9A</color>
+    <color name="mediumspringgreen3">#99FFCC</color>
+
+    <color name="light_green2">#CC4CFF60</color>//( 137, 232, 148)
+    <color name="LightStealBlue">#B0C4DE</color>//(176,196,222)
+    <color name="light_green">#BED661</color>//( 190, 214, 97 )
+
+    <color name="lightskyblue">#1F9DEC</color>//(135,206,250)
+    <color name="powderblue">#B0E0E6</color>//(176,224,230)
+    <color name="corn_flower_blue">#07307A</color>//(100,149,237)
+
+    <color name="pink">#FFC0CB</color>//(255,192,203)
+    <color name="mistyrose">#FFE4E1</color>//(255,228,225)
+    <color name="thistle">#D8BFD8</color>//(216,191,216)
+
+    <color name="pale_turquoise">#AFEEEE</color>//(175,238,238)
+</resources>
