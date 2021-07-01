@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
 //                    POP UP FOR GET THE PERMISSION..........
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS, Manifest.permission.CALL_PHONE}, 44);
 
         }
@@ -210,6 +210,22 @@ public class MainActivity extends AppCompatActivity {
 
 
             while (true) {
+
+                if (data_1 < databaseHelperClass.readSPO2AndHeartRate().getSPO2() || data_2 < databaseHelperClass.readSPO2AndHeartRate().getHeartBeat())
+                {
+                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+                            && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+
+                            && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                        getMyLocation(data_1, data_2);
+                    } else {
+                        permission_location_msg_call();
+                    }
+                }
+
 
                 if (System.currentTimeMillis() - notification1 > notify1After) {
 
@@ -459,23 +475,7 @@ public class MainActivity extends AppCompatActivity {
                 edit_1.setText(String.valueOf(data_2));
                 edit_2.setText(String.valueOf(data_1));
 
-// al mamun working here..........
-                if (data_1 < databaseHelperClass.readSPO2AndHeartRate().getSPO2() || data_2 < databaseHelperClass.readSPO2AndHeartRate().getHeartBeat())
-                {
-                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
-
-                            && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
-
-                            && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                        getMyLocation(data_1, data_2);
-                    } else {
-                        permission_location_msg_call();
-                    }
-
-
-                }
+                // al mamun working here..........
 
 
                 itt2 = itt2 + incoming_byte_size;
@@ -533,10 +533,6 @@ public class MainActivity extends AppCompatActivity {
                                 String call = "tel:" + number1;
                                 startActivity(new Intent(Intent.ACTION_CALL, Uri.parse(call)));
                             }
-
-
-
-
 
                         } else {
                             LocationRequest locationRequest = new LocationRequest()
@@ -597,12 +593,10 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if ((requestCode == 44 && grantResults.length > 0 && grantResults[0] + grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
 
+
             Toast.makeText(MainActivity.this, "Permission Granted.....", Toast.LENGTH_SHORT).show();
             permission_locate_msg_call = 1;
 
-
-        } else {
-            Toast.makeText(MainActivity.this, "Permission Denied....", Toast.LENGTH_SHORT).show();
 
         }
 
