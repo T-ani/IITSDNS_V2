@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
     TextView edit_1, edit_2;
     long gps_msg_time;
     long gps_total_time;
-    int data_1;
-    int data_2;
+    int data_1=1000;
+    int data_2=1000;
     int count1 = 0;
     long notification1;
     long notification2;
@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
     byte[] second_data = new byte[2];
     int permission_msg = 0;
     int permission_locate_msg_call = 0;
+
+    int spo2,heartRate;
 
 
     static final int STATE_CONNECTING = 2;
@@ -167,7 +169,10 @@ public class MainActivity extends AppCompatActivity {
         permission_location_msg_call();
 
         System.out.println("----" + permission_locate_msg_call + "----");
+        System.out.println("----" + databaseHelperClass.readSPO2AndHeartRate().getSPO2() + "----"+databaseHelperClass.readSPO2AndHeartRate().getHeartBeat());
 
+        spo2=databaseHelperClass.readSPO2AndHeartRate().getSPO2();
+        heartRate=databaseHelperClass.readSPO2AndHeartRate().getHeartBeat();
     }
 
 
@@ -211,19 +216,23 @@ public class MainActivity extends AppCompatActivity {
 
             while (true) {
 
-                if (data_1 < databaseHelperClass.readSPO2AndHeartRate().getSPO2() || data_2 < databaseHelperClass.readSPO2AndHeartRate().getHeartBeat())
+                if(spo2!=0 && heartRate!=0)
                 {
-                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                    if (data_1 < spo2 || data_2 < heartRate)
+                    {
+                        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-                            && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
-                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+                                && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
+                                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
 
-                            && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                        getMyLocation(data_1, data_2);
-                    } else {
-                        permission_location_msg_call();
+                                && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                            getMyLocation(data_1, data_2);
+                        } else {
+                            permission_location_msg_call();
+                        }
                     }
+
                 }
 
 
