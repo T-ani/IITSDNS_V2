@@ -517,11 +517,14 @@ public class MainActivity extends AppCompatActivity {
 
                             String number2 = databaseHelperClass.readPhoneNumberModelClass().getPhoneNumber1();
 
+                            number1 = number1.replace("'","");
+                            number2 = number2.replace("'","");
+
                             if(number1.length()>0||number2.length()>0)
                             {
-                                String message = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n";
+                                String message = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n" + "A person in distress special attention required in this location: \n";
                                 // String message1 = "http://google.com/maps/bylatlng?lat=" + String.valueOf(location.getLatitude()) + "&lng=" + String.valueOf(location.getLongitude());
-                                String message2 = "\nLatitude : " + String.valueOf(location.getLatitude()) + "\nLongtitude : " + String.valueOf(location.getLongitude());
+                                String message2 = "Latitude : " + String.valueOf(location.getLatitude()) + "\nLongtitude : " + String.valueOf(location.getLongitude());
 
                                 SmsManager smsManager = SmsManager.getDefault();
                                 smsManager.sendTextMessage(number1, null, message + message2, null, null);
@@ -555,9 +558,9 @@ public class MainActivity extends AppCompatActivity {
 
                                     if(number1.length()>0||number2.length()>0)
                                     {
-                                        String message1 = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n";
+                                        String message1 = "SpO2 : " + String.valueOf(a) + "\nHeart Rate : " + String.valueOf(b) + "\n" + "A person in distress special attention required in this location: \n";
                                         // String message = "http://google.com/maps/bylatlng?lat=" + String.valueOf(location1.getLatitude()) + "&lng=" + String.valueOf(location1.getLongitude());
-                                        String message2 = "\nLatitude : " + String.valueOf(location1.getLatitude()) + "\nLongtitude : " + String.valueOf(location1.getLongitude());
+                                        String message2 = "Latitude : " + String.valueOf(location1.getLatitude()) + "\nLongtitude : " + String.valueOf(location1.getLongitude());
 
                                         SmsManager smsManager = SmsManager.getDefault();
                                         smsManager.sendTextMessage(number1, null, message1 + message2, null, null);
