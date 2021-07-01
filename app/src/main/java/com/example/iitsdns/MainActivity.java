@@ -14,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -26,6 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.telephony.CarrierConfigManager;
 import android.telephony.SmsManager;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     int permission_locate_msg_call = 0;
 
     int spo2,heartRate;
+    int flag1=0;
 
 
     static final int STATE_CONNECTING = 2;
@@ -216,24 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
             while (true) {
 
-                if(spo2!=0 && heartRate!=0)
-                {
-                    if (data_1 < spo2 || data_2 < heartRate)
-                    {
-                        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 
-                                && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
-                                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
-
-                                && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                            getMyLocation(data_1, data_2);
-                        } else {
-                            permission_location_msg_call();
-                        }
-                    }
-
-                }
 
 
                 if (System.currentTimeMillis() - notification1 > notify1After) {
@@ -609,5 +595,45 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public  class Background extends Service{
+
+        @Override
+        public int onStartCommand(Intent intent, int flags, int startId) {
+
+            if(spo2!=0 && heartRate!=0)
+            {
+                flag1=1;
+                if (data_1 < spo2 || data_2 < heartRate)
+                {
+                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+
+                            && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED
+
+                            && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                        getMyLocation(data_1, data_2);
+                    } else {
+                        permission_location_msg_call();
+                    }
+                }
+
+            }
+            return START_STICKY;
+        }
+
+        @Override
+        public void onDestroy() {
+            flag1=0;
+            super.onDestroy();
+        }
+
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
     }
 }
